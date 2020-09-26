@@ -122,7 +122,6 @@ C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\bin\Debug\netcoreapp3
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.csprojAssemblyReference.cache
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.AssemblyInfoInputs.cache
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.AssemblyInfo.cs
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.csproj.CoreCompileInputs.cache
@@ -135,3 +134,4 @@ C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.dll
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.pdb
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.genruntimeconfig.cache
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.csprojAssemblyReference.cache

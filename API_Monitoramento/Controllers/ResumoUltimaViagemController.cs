@@ -14,27 +14,47 @@ namespace API_Monitoramento.Controllers
 
     public class ResumoUltimaViagemController : ControllerBase
     {
-        
-        protected readonly dbContext db;
-
-        public ResumoUltimaViagemController(dbContext _db) => db = _db;
-
 
         /// <summary>
-        /// Obter Resumo de viagens.
+        /// Obter resumos.
         /// </summary>
         /// <response code="200">A lista de resumo foi obtida com sucesso.</response>
-        /// <response code="500">Ocorreu um erro ao obter a lista de resumo.</response>
+        /// <response code="500">Ocorreu um erro ao obter a lista de resumos.</response>
         [HttpGet]
         [Route("")]
-        public async Task<ActionResult<List<ResumoUltimaViagem>>> GetAction([FromServices] dbContext context)
+        public IQueryable<ResumoUltimaViagem> GetresumoUltimaViagems([FromServices] dbContext context)
         {
-            var resumo = await db.resumoUltimaViagem.ToListAsync();
-            return resumo;
+
+            try
+            {
+                var listresumoUltimaViagems = context.resumoUltimaViagem.Select(resumoUltimaViagem => new ResumoUltimaViagem
+                {
+
+                    codigo = resumoUltimaViagem.codigo,
+                    consumo = resumoUltimaViagem.consumo,
+                    notaConducao = resumoUltimaViagem.notaConducao,
+                    distancia = resumoUltimaViagem.distancia,
+                    distanciaAbastecimento = resumoUltimaViagem.distanciaAbastecimento,
+                    avarias = resumoUltimaViagem.avarias,
+                    proximaRevisao = resumoUltimaViagem.proximaRevisao,
+                    origem = resumoUltimaViagem.origem,
+                    destino = resumoUltimaViagem.destino,
+                    veiculo = resumoUltimaViagem.veiculo
+
+                });
+
+                return listresumoUltimaViagems;
+
+
+            }
+            catch (Exception ex)
+            {
+                return (IQueryable<ResumoUltimaViagem>)BadRequest(ex.ToString());
+            }
         }
 
         /// <summary>
-        /// Obter um Resumo específico por ID.
+        /// Obter um resumo específico por ID.
         /// </summary>
         /// <param name="id">ID do resumo.</param>
         /// <response code="200">O resumo foi obtido com sucesso.</response>
@@ -42,61 +62,129 @@ namespace API_Monitoramento.Controllers
         /// <response code="500">Ocorreu um erro ao obter o resumo.</response>
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<ResumoUltimaViagem>> GetById([FromServices] dbContext context, int id)
+        public IQueryable<ResumoUltimaViagem> GetById([FromServices] dbContext context, int id)
         {
-            var resumo = await db.resumoUltimaViagem.FirstOrDefaultAsync(x => x.codigo == id);
-            return resumo;
+
+            try
+            {
+                var resumoUltimaViagem = context.resumoUltimaViagem.Where(x => x.codigo == id).Select(resumoUltimaViagem => new ResumoUltimaViagem
+                {
+
+                    codigo = resumoUltimaViagem.codigo,
+                    consumo = resumoUltimaViagem.consumo,
+                    notaConducao = resumoUltimaViagem.notaConducao,
+                    distancia = resumoUltimaViagem.distancia,
+                    distanciaAbastecimento = resumoUltimaViagem.distanciaAbastecimento,
+                    avarias = resumoUltimaViagem.avarias,
+                    proximaRevisao = resumoUltimaViagem.proximaRevisao,
+                    origem = resumoUltimaViagem.origem,
+                    destino = resumoUltimaViagem.destino,
+                    veiculo = resumoUltimaViagem.veiculo
+
+                }) ;
+
+                return resumoUltimaViagem;
+
+
+            }
+            catch (Exception ex)
+            {
+                return (IQueryable<ResumoUltimaViagem>)BadRequest(ex.ToString());
+            }
         }
 
-        /// <summary>
-        /// Criar um novo resumo
-        /// </summary>
-        /// <response code="200">O resumo foi cadastrado com sucesso.</response>
-        /// <response code="500">Ocorreu um erro ao cadastrar o resumo.</response>
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<ResumoUltimaViagem>> Post([FromServices] dbContext context, [FromBody] ResumoUltimaViagem model)
         {
-           
-            db.resumoUltimaViagem.Add(model);
-            await context.SaveChangesAsync();
-            return model;
-            
+            try
+            {
+                var resumoUltimaViagem = new ResumoUltimaViagem();
+                context.Add(resumoUltimaViagem);
+
+                resumoUltimaViagem.consumo = model.consumo;
+                resumoUltimaViagem.notaConducao = model.notaConducao;
+                resumoUltimaViagem.distancia = model.distancia;
+                resumoUltimaViagem.distanciaAbastecimento = model.distanciaAbastecimento;
+                resumoUltimaViagem.avarias = model.avarias;
+                resumoUltimaViagem.proximaRevisao = model.proximaRevisao;
+                resumoUltimaViagem.origem = model.origem;
+                resumoUltimaViagem.destino = model.destino;
+                resumoUltimaViagem.veiculo = model.veiculo;
+
+                await context.SaveChangesAsync();
+                return resumoUltimaViagem;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
+
         }
 
-        /// <summary>
-        /// Alterar um resumo.
-        /// </summary>
-        /// <response code="200">O resumo foi alterado com sucesso.</response>
-        /// <response code="404">Não foi encontrado o resumo especificado.</response>
-        /// <response code="500">Ocorreu um erro ao alterar o resumo.</response>
+
         [HttpPut]
         [Route("")]
-        public async Task<ActionResult<string>> Put([FromServices] dbContext context, [FromBody] ResumoUltimaViagem model)
+        public async Task<ActionResult<ResumoUltimaViagem>> Put([FromServices] dbContext context, [FromBody] ResumoUltimaViagem model)
         {
-            context.resumoUltimaViagem.Update(model);
-            await context.SaveChangesAsync();
-            return "ok";
-           
+            try
+            {
+                var resumoUltimaViagem = new ResumoUltimaViagem();
+                resumoUltimaViagem = await context.resumoUltimaViagem.FirstOrDefaultAsync(x => x.codigo == model.codigo);
+
+                if (resumoUltimaViagem != null)
+                {
+                    resumoUltimaViagem.consumo = model.consumo;
+                    resumoUltimaViagem.notaConducao = model.notaConducao;
+                    resumoUltimaViagem.distancia = model.distancia;
+                    resumoUltimaViagem.distanciaAbastecimento = model.distanciaAbastecimento;
+                    resumoUltimaViagem.avarias = model.avarias;
+                    resumoUltimaViagem.proximaRevisao = model.proximaRevisao;
+                    resumoUltimaViagem.origem = model.origem;
+                    resumoUltimaViagem.destino = model.destino;
+                    resumoUltimaViagem.veiculo = model.veiculo;
+
+                    context.SaveChanges();
+                    return resumoUltimaViagem;
+                }
+
+                return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
+
+
         }
 
-        /// <summary>
-        /// Remover um resumo específico por ID.
-        /// </summary>
-        /// <param name="id">ID do veículo.</param>
-        /// <response code="200">O resumo foi removido com sucesso.</response>
-        /// <response code="404">Não foi encontrado resumo com ID especificado.</response>
-        /// <response code="500">Ocorreu um erro ao alterar o resumo.</response>
+
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<ActionResult<string>> Delete([FromServices] dbContext context, int id)
         {
-            
-            var resumo = await db.resumoUltimaViagem.FirstOrDefaultAsync(x => x.codigo == id);
-            context.resumoUltimaViagem.Remove(resumo);
-            await context.SaveChangesAsync();
-            return "ok";
-           
+            try
+            {
+                var resumoUltimaViagem = new ResumoUltimaViagem();
+                resumoUltimaViagem = await context.resumoUltimaViagem.FirstOrDefaultAsync(x => x.codigo == id);
+
+                if (resumoUltimaViagem != null)
+                {
+                    context.resumoUltimaViagem.Remove(resumoUltimaViagem);
+                    context.SaveChanges();
+                    return Ok();
+                }
+
+
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
     }
 }

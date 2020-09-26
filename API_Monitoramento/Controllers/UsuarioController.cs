@@ -14,9 +14,6 @@ namespace API_Monitoramento.Controllers
     public class UsuarioController : ControllerBase
     {
 
-        protected readonly dbContext db;
-
-        public UsuarioController(dbContext _db) => db = _db;
 
 
         /// <summary>
@@ -26,10 +23,28 @@ namespace API_Monitoramento.Controllers
         /// <response code="500">Ocorreu um erro ao obter a lista de usuários.</response>
         [HttpGet]
         [Route("")]
-        public async Task<ActionResult<List<Usuario>>> GetAction([FromServices] dbContext context)
+        public IQueryable<Usuario> GetUsuarios([FromServices] dbContext context)
         {
-            var users = await db.usuario.ToListAsync();
-            return users;
+
+            try
+            {
+                var listUsuarios = context.usuario.Select(usuario => new Usuario
+                {
+
+                    codigo = usuario.codigo,
+                    nome = usuario.nome,
+                    email = usuario.email,
+
+                });
+
+                return listUsuarios;
+
+
+            }
+            catch (Exception ex)
+            {
+                return (IQueryable<Usuario>)BadRequest(ex.ToString());
+            }
         }
 
         /// <summary>
@@ -41,59 +56,108 @@ namespace API_Monitoramento.Controllers
         /// <response code="500">Ocorreu um erro ao obter o usuário.</response>
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<Usuario>> GetById([FromServices] dbContext context, int id)
+        public IQueryable<Usuario> GetById([FromServices] dbContext context, int id)
         {
-            var users = await db.usuario.FirstOrDefaultAsync(x => x.codigo == id);
-            return users;
+
+            try
+            {
+                var usuario = context.usuario.Where(x => x.codigo == id).Select(usuario => new Usuario
+                {
+
+                    codigo = usuario.codigo,
+                    nome = usuario.nome,
+                    email = usuario.email,
+
+                });
+
+                return usuario;
+
+
+            }
+            catch (Exception ex)
+            {
+                return (IQueryable<Usuario>)BadRequest(ex.ToString());
+            }
         }
 
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<Usuario>> Post([FromServices] dbContext context, [FromBody] Usuario model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.usuario.Add(model);
+                var usuario = new Usuario();
+                context.Add(usuario);
+
+                usuario.email = model.email;
+                usuario.nome = model.nome;
+                usuario.senha = model.senha;
+
                 await context.SaveChangesAsync();
-                return model;
+                return usuario;
             }
-            else
+            catch(Exception ex)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ex.ToString());
             }
+                
+         
         }
 
 
         [HttpPut]
         [Route("")]
-        public async Task<ActionResult<string>> Put([FromServices] dbContext context, [FromBody] Usuario model)
+        public async Task<ActionResult<Usuario>> Put([FromServices] dbContext context, [FromBody] Usuario model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                context.usuario.Remove(model);
-                await context.SaveChangesAsync();
-                return "ok";
-            }
-            else
+                var usuario = new Usuario();
+                usuario = await context.usuario.FirstOrDefaultAsync(x => x.codigo == model.codigo);
+
+                if(usuario != null)
+                {
+                    usuario.nome = model.nome;
+                    usuario.email = model.email;
+
+                    context.SaveChanges();
+                    usuario.senha = null;
+                    return usuario;
+                }
+
+                return NotFound();
+
+            }catch(Exception ex)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ex.ToString());
             }
+            
+
+            
         }
 
 
         [HttpDelete]
-        [Route("")]
-        public async Task<ActionResult<string>> Delete([FromServices] dbContext context, [FromBody] Usuario model)
+        [Route("{id:int}")]
+        public async Task<ActionResult<string>> Delete([FromServices] dbContext context,  int id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                context.usuario.Remove(model);
-                await context.SaveChangesAsync();
-                return "ok";
+                var usuario = new Usuario();
+                usuario = await context.usuario.FirstOrDefaultAsync(x => x.codigo == id);
+
+                if(usuario != null)
+                {
+                    context.usuario.Remove(usuario);
+                    context.SaveChanges();
+                    return Ok();
+                }
+
+
+                return NotFound();
             }
-            else
+            catch(Exception e)
             {
-                return BadRequest(ModelState);
+                return BadRequest(e.ToString());
             }
         }
     }

@@ -15,7 +15,6 @@ namespace API_Monitoramento.Controllers
 
         protected readonly dbContext db;
 
-        public VeiculoController(dbContext _db) => db = _db;
 
 
         /// <summary>
