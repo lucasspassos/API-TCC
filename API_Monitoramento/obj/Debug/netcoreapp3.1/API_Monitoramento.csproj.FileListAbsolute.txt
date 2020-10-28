@@ -135,3 +135,4 @@ C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.pdb
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.genruntimeconfig.cache
 C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\API_Monitoramento.csprojAssemblyReference.cache
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\bin\Debug\netcoreapp3.1\aws-beanstalk-tools-defaults.json

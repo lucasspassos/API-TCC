@@ -1,0 +1,6 @@
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\linux-x64\API_Monitoramento.csprojAssemblyReference.cache
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\linux-x64\API_Monitoramento.AssemblyInfoInputs.cache
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\linux-x64\API_Monitoramento.AssemblyInfo.cs
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\linux-x64\API_Monitoramento.csproj.CoreCompileInputs.cache
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\linux-x64\API_Monitoramento.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\RG6790\Documents\Facens\API-TCC\API_Monitoramento\obj\Debug\netcoreapp3.1\linux-x64\API_Monitoramento.MvcApplicationPartsAssemblyInfo.cache

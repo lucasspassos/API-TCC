@@ -13,104 +13,156 @@ namespace API_Monitoramento.Controllers
     public class VeiculoController : ControllerBase
     {
 
-        protected readonly dbContext db;
-
-
-
         /// <summary>
-        /// Obter Veículos.
+        /// Obter veículos.
         /// </summary>
-        /// <response code="200">A lista de veículos foi obtida com sucesso.</response>
+        /// <response code="200">A lista de veículo foi obtida com sucesso.</response>
         /// <response code="500">Ocorreu um erro ao obter a lista de veículos.</response>
         [HttpGet]
         [Route("")]
-        public async Task<ActionResult<List<Veiculo>>> GetAction([FromServices] dbContext context)
+        public IQueryable<Veiculo> Getveiculos([FromServices] dbContext context)
         {
-            var veiculos = await db.veiculo.ToListAsync();
-            return veiculos;
+
+            try
+            {
+                var listveiculos = context.veiculo.Select(veiculo => new Veiculo
+                {
+
+                    codigo = veiculo.codigo,
+                    marca = veiculo.marca,
+                    modelo = veiculo.modelo,
+                    anoFabricacao = veiculo.anoFabricacao,
+                    cod_usuario = veiculo.cod_usuario
+
+                });
+
+                return listveiculos;
+
+
+            }
+            catch (Exception ex)
+            {
+                return (IQueryable<Veiculo>)BadRequest(ex.ToString());
+            }
         }
 
         /// <summary>
         /// Obter um veículo específico por ID.
         /// </summary>
-        /// <param name="id">ID do usuário.</param>
+        /// <param name="id">ID do veículo.</param>
         /// <response code="200">O veículo foi obtido com sucesso.</response>
         /// <response code="404">Não foi encontrado veículo com ID especificado.</response>
         /// <response code="500">Ocorreu um erro ao obter o veículo.</response>
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<Veiculo>> GetById([FromServices] dbContext context, int id)
+        public IQueryable<Veiculo> GetById([FromServices] dbContext context, int id)
         {
-            var users = await db.veiculo.FirstOrDefaultAsync(x => x.codigo == id);
-            return users;
+
+            try
+            {
+                var veiculo = context.veiculo.Where(x => x.codigo == id).Select(veiculo => new Veiculo
+                {
+
+                    codigo = veiculo.codigo,
+                    marca = veiculo.marca,
+                    modelo = veiculo.modelo,
+                    anoFabricacao = veiculo.anoFabricacao,
+                    cod_usuario = veiculo.cod_usuario
+
+                });
+
+                return veiculo;
+
+
+            }
+            catch (Exception ex)
+            {
+                return (IQueryable<Veiculo>)BadRequest(ex.ToString());
+            }
         }
 
-        /// <summary>
-        /// Criar um novo veículo
-        /// </summary>
-        /// <response code="200">O veículo foi cadastrado com sucesso.</response>
-        /// <response code="500">Ocorreu um erro ao cadastrar o veículo.</response>
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<Veiculo>> Post([FromServices] dbContext context, [FromBody] Veiculo model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.veiculo.Add(model);
+                var veiculo = new Veiculo();
+                context.Add(veiculo);
+
+                veiculo.marca = model.marca;
+                veiculo.modelo = model.modelo;
+                veiculo.anoFabricacao = model.anoFabricacao;
+                veiculo.cod_usuario = model.cod_usuario;
+
                 await context.SaveChangesAsync();
-                return model;
+                return veiculo;
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ex.ToString());
             }
+
+
         }
 
-        /// <summary>
-        /// Alterar um veículo.
-        /// </summary>
-        /// <param name="id">ID do veículo.</param>
-        /// <response code="200">O veículo foi alterado com sucesso.</response>
-        /// <response code="404">Não foi encontrado o veículo especificado.</response>
-        /// <response code="500">Ocorreu um erro ao alterar o veículo.</response>
+
         [HttpPut]
         [Route("")]
-        public async Task<ActionResult<string>> Put([FromServices] dbContext context, [FromBody] Veiculo model)
+        public async Task<ActionResult<Veiculo>> Put([FromServices] dbContext context, [FromBody] Veiculo model)
         {
-            if (ModelState.IsValid)
+            try
             {
-               
-                context.veiculo.Update(model);
-                await context.SaveChangesAsync();
-                return "ok";
+                var veiculo = new Veiculo();
+                veiculo = await context.veiculo.FirstOrDefaultAsync(x => x.codigo == model.codigo);
+
+                if (veiculo != null)
+                {
+                    veiculo.codigo = model.codigo;
+                    veiculo.marca = model.marca;
+                    veiculo.modelo = model.modelo;
+                    veiculo.anoFabricacao = model.anoFabricacao;
+                    veiculo.cod_usuario = model.cod_usuario;
+
+                    context.SaveChanges();
+                    return veiculo;
+                }
+
+                return NotFound();
+
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ex.ToString());
             }
+
+
+
         }
 
-        /// <summary>
-        /// Remover um veículo específico por ID.
-        /// </summary>
-        /// <param name="id">ID do veículo.</param>
-        /// <response code="200">O veículo foi alterado com sucesso.</response>
-        /// <response code="404">Não foi encontrado veículo com ID especificado.</response>
-        /// <response code="500">Ocorreu um erro ao alterar o veículo.</response>
+
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<ActionResult<string>> Delete([FromServices] dbContext context, int id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var veiculo = await db.veiculo.FirstOrDefaultAsync(x => x.codigo == id);
-                context.veiculo.Remove(veiculo);
-                await context.SaveChangesAsync();
-                return "ok";
+                var veiculo = new Veiculo();
+                veiculo = await context.veiculo.FirstOrDefaultAsync(x => x.codigo == id);
+
+                if (veiculo != null)
+                {
+                    context.veiculo.Remove(veiculo);
+                    context.SaveChanges();
+                    return Ok();
+                }
+
+
+                return NotFound();
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest(ModelState);
+                return BadRequest(e.ToString());
             }
         }
     }

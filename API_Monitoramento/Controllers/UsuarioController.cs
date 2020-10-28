@@ -160,5 +160,6 @@ namespace API_Monitoramento.Controllers
                 return BadRequest(e.ToString());
             }
         }
+
     }
 }
