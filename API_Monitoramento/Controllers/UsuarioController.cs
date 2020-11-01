@@ -14,8 +14,6 @@ namespace API_Monitoramento.Controllers
     public class UsuarioController : ControllerBase
     {
 
-
-
         /// <summary>
         /// Obter Usuários.
         /// </summary>
@@ -47,6 +45,32 @@ namespace API_Monitoramento.Controllers
             }
         }
 
+        /// <summary>
+        /// Obter Acesso.
+        /// </summary>
+        /// <response code="200">Usuário encontrado</response>
+        /// <response code="500">Ocorreu um erro ao obter o usuário.</response>
+        [HttpPost]
+        [Route("Logar")]
+        public Usuario GetUsuario([FromServices] dbContext context, Usuario model)
+        {
+
+            try
+            {
+                var usuario = new Usuario();
+                 
+                usuario = context.usuario.Where(x => x.email == model.email && x.senha == model.senha).FirstOrDefault();
+
+
+                return usuario;
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Obter um usuário específico por ID.
         /// </summary>
@@ -86,6 +110,11 @@ namespace API_Monitoramento.Controllers
         {
             try
             {
+                var existeUsuario = context.usuario.Where(x => x.email == model.email);
+
+                if (existeUsuario != null)
+                    return BadRequest("User existent");
+
                 var usuario = new Usuario();
                 context.Add(usuario);
 

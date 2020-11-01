@@ -14,8 +14,6 @@ namespace API_Monitoramento.Models
         public string marca { get; set; }
         public string modelo { get; set; }
         public string anoFabricacao { get; set; }
-
-        [ForeignKey("veiculo_fk_usuario")]
         public int cod_usuario { get; set; }
 
 
