@@ -14,14 +14,20 @@ namespace API_Monitoramento.Models
         public double consumo { get; set; }
         public double notaConducao { get; set; }
         public double distancia { get; set; }
-        public double distanciaAbastecimento { get; set; }
+        public double nivelTanque { get; set; }
         public int avarias { get; set; }
-        public double proximaRevisao { get; set; }
         public string origem { get; set; }
         public string destino { get; set; }
+        public int codigoVeiculo { get; set; }
+        public double temperaturaMaxima { get; set; }
+        public double velocidadeMaxima { get; set; }
+        public DateTime dataInicio { get; set; }
+        public DateTime dataTermino { get; set; }
 
-        [ForeignKey("resumo_fk_veiculo")]
-        public Veiculo veiculo { get; set; }
-
+    }
+    public class ResumoRequest : ResumoUltimaViagem
+    {
+        public int codigoUsuario { get; set; }
+        
     }
 }

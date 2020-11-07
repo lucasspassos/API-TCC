@@ -110,7 +110,7 @@ namespace API_Monitoramento.Controllers
         {
             try
             {
-                var existeUsuario = context.usuario.Where(x => x.email == model.email);
+                var existeUsuario = context.usuario.FirstOrDefault(x => x.email == model.email);
 
                 if (existeUsuario != null)
                     return BadRequest("User existent");
